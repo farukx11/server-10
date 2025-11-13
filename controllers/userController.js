@@ -1,9 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
-/**
- * Get profile
- */
 const getProfile = async (req, res, next) => {
   try {
     const user = req.user;
@@ -13,9 +10,6 @@ const getProfile = async (req, res, next) => {
   }
 };
 
-/**
- * Update profile: name, photoURL, optionally password
- */
 const updateProfile = async (req, res, next) => {
   try {
     const { name, photoURL, password } = req.body;
@@ -26,11 +20,9 @@ const updateProfile = async (req, res, next) => {
         .status(404)
         .json({ success: false, message: "User not found" });
 
-    // Update name and photoURL if provided
     if (name) user.name = name;
     if (photoURL) user.photoURL = photoURL;
 
-    // Handle password update
     if (password) {
       const passwordRegex =
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
@@ -42,8 +34,7 @@ const updateProfile = async (req, res, next) => {
         });
       }
 
-      // Only hash password if it's being updated
-      const salt = await bcrypt.genSalt(12); // stronger salt
+      const salt = await bcrypt.genSalt(12);
       user.password = await bcrypt.hash(password, salt);
     }
 

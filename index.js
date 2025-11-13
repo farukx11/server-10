@@ -8,11 +8,9 @@ const bcrypt = require("bcryptjs"); // Added for secure password hashing
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// MongoDB setup
 const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri, {
   serverApi: {
@@ -42,7 +40,6 @@ async function connectDB() {
 }
 connectDB();
 
-// JWT Middleware
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader)
@@ -57,16 +54,11 @@ function verifyJWT(req, res, next) {
   });
 }
 
-// --------- ROUTES ---------
-
 // Test Route
 app.get("/", (req, res) => {
   res.send("FinEase Server is running ✅");
 });
 
-// ---- AUTH ---- //
-
-// Register
 app.post("/api/auth/register", async (req, res) => {
   try {
     const { name, email, password, photoURL } = req.body;
@@ -76,7 +68,6 @@ app.post("/api/auth/register", async (req, res) => {
         .status(400)
         .json({ success: false, message: "Name, email and password required" });
 
-    // Password validation
     if (!/[A-Z]/.test(password))
       return res.status(400).json({
         success: false,
@@ -99,7 +90,6 @@ app.post("/api/auth/register", async (req, res) => {
         .status(400)
         .json({ success: false, message: "Email already registered" });
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = {
@@ -125,7 +115,6 @@ app.post("/api/auth/register", async (req, res) => {
   }
 });
 
-// Login
 app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -157,7 +146,6 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-// ---- USER PROFILE ---- //
 app.get("/api/user/me", verifyJWT, async (req, res) => {
   try {
     const user = await usersCollection.findOne(
@@ -202,9 +190,6 @@ app.put("/api/user/me", verifyJWT, async (req, res) => {
   }
 });
 
-// ---- TRANSACTIONS CRUD ---- //
-
-// Add Transaction
 app.post("/api/transactions", verifyJWT, async (req, res) => {
   try {
     const { type, category, amount, description, date } = req.body;
@@ -236,7 +221,6 @@ app.post("/api/transactions", verifyJWT, async (req, res) => {
   }
 });
 
-// Get all transactions (sorted)
 app.get("/api/transactions", verifyJWT, async (req, res) => {
   try {
     const transactions = await transactionsCollection
@@ -249,7 +233,6 @@ app.get("/api/transactions", verifyJWT, async (req, res) => {
   }
 });
 
-// Get single transaction
 app.get("/api/transactions/:id", verifyJWT, async (req, res) => {
   try {
     const id = req.params.id;
@@ -267,7 +250,6 @@ app.get("/api/transactions/:id", verifyJWT, async (req, res) => {
   }
 });
 
-// Update transaction
 app.put("/api/transactions/:id", verifyJWT, async (req, res) => {
   try {
     const id = req.params.id;

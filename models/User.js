@@ -8,38 +8,36 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Email regex validation
+      match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     },
     photoURL: {
       type: String,
-      default: "https://example.com/default-avatar.png", // Default photo URL if not provided
+      default: "https://example.com/default-avatar.png",
     },
     password: { type: String, required: true },
   },
   {
-    timestamps: true, // Automatically adds createdAt and updatedAt
+    timestamps: true,
   }
 );
 
-// Pre-save middleware to hash the password before saving it to the database
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next(); // Only hash if password is modified
+  if (!this.isModified("password")) return next();
 
   try {
-    const salt = await bcrypt.genSalt(10); // Generate salt with strength of 10
-    this.password = await bcrypt.hash(this.password, salt); // Hash the password
-    next(); // Continue with the save process
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
   } catch (err) {
-    next(err); // If error occurs, pass it to next() (error handler)
+    next(err);
   }
 });
 
-// Method to compare passwords for login
 userSchema.methods.comparePassword = async function (password) {
   try {
-    return await bcrypt.compare(password, this.password); // Compare provided password with stored hashed password
+    return await bcrypt.compare(password, this.password);
   } catch (err) {
-    throw new Error("Password comparison failed"); // In case of error
+    throw new Error("Password comparison failed");
   }
 };
 

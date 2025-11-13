@@ -2,9 +2,6 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const { signToken } = require("../config/jwt");
 
-/**
- * Register: name, email, password, photoURL
- */
 const register = async (req, res, next) => {
   try {
     const { name, email, password, photoURL } = req.body;
@@ -15,7 +12,6 @@ const register = async (req, res, next) => {
       });
     }
 
-    // Password validation - including special characters and numbers
     const passwordRegex =
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
     if (!passwordRegex.test(password)) {
@@ -101,11 +97,6 @@ const login = async (req, res, next) => {
   }
 };
 
-/**
- * Google Sign-In token flow:
- * Verifying Google token on backend is recommended.
- * Here, we simply "upsert" user if they don't exist.
- */
 const googleAuth = async (req, res, next) => {
   try {
     const { email, name, photoURL } = req.body;
