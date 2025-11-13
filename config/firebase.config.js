@@ -4,13 +4,11 @@ const app = express();
 
 app.use(express.json());
 
-// Helper function for email validation
 const validateEmail = (email) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   return emailRegex.test(email);
 };
 
-// Helper function for password validation (e.g., minimum length check)
 const validatePassword = (password) => {
   return password && password.length >= 6; // Password must be at least 6 characters
 };
@@ -18,7 +16,6 @@ const validatePassword = (password) => {
 app.post("/create-user", async (req, res) => {
   const { email, password } = req.body;
 
-  // Validate input
   if (!email || !validateEmail(email)) {
     return res.status(400).send({
       success: false,
@@ -34,7 +31,6 @@ app.post("/create-user", async (req, res) => {
   }
 
   try {
-    // Create user with Firebase Authentication
     const userRecord = await auth.createUser({
       email,
       password,
@@ -56,7 +52,6 @@ app.post("/create-user", async (req, res) => {
   }
 });
 
-// Start the server
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });

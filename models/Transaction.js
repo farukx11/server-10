@@ -51,12 +51,12 @@ const transactionSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: false, // Optional, since Firebase already manages user identity
+      required: false,
       index: true,
     },
   },
   {
-    timestamps: true, // Automatically adds createdAt and updatedAt fields
+    timestamps: true,
   }
 );
 

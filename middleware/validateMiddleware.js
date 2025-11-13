@@ -7,7 +7,6 @@ const validateTransaction = (req, res, next) => {
     errs.push("Type is required and must be 'income' or 'expense'");
   }
 
-  // Validate 'category' Must be provided
   if (!category) {
     errs.push("Category is required");
   }
