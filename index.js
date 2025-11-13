@@ -286,7 +286,6 @@ app.put("/api/transactions/:id", verifyJWT, async (req, res) => {
   }
 });
 
-// Delete transaction
 app.delete("/api/transactions/:id", verifyJWT, async (req, res) => {
   try {
     const id = req.params.id;
