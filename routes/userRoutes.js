@@ -20,6 +20,8 @@ router.put("/me", auth, async (req, res, next) => {
       });
     }
 
+    // git commit -m "Create Transaction model and schema using Mongoose"
+
     if (password && password.length < 6) {
       return res.status(400).json({
         success: false,
