@@ -185,12 +185,10 @@ app.put("/api/user/me", verifyJWT, async (req, res) => {
     if (photoURL) updateFields.photoURL = photoURL;
     if (password) {
       if (password.length < 6)
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: "Password must be at least 6 characters",
-          });
+        return res.status(400).json({
+          success: false,
+          message: "Password must be at least 6 characters",
+        });
       updateFields.password = await bcrypt.hash(password, 10);
     }
 
@@ -228,13 +226,11 @@ app.post("/api/transactions", verifyJWT, async (req, res) => {
       createdAt: new Date(),
     };
     const result = await transactionsCollection.insertOne(transaction);
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "Transaction added",
-        transactionId: result.insertedId,
-      });
+    res.status(201).json({
+      success: true,
+      message: "Transaction added",
+      transactionId: result.insertedId,
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -280,12 +276,10 @@ app.put("/api/transactions/:id", verifyJWT, async (req, res) => {
       { $set: req.body }
     );
     if (updated.matchedCount === 0)
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "Transaction not found or unauthorized",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "Transaction not found or unauthorized",
+      });
     res.json({ success: true, message: "Transaction updated successfully" });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -301,19 +295,16 @@ app.delete("/api/transactions/:id", verifyJWT, async (req, res) => {
       email: req.user.email,
     });
     if (deleted.deletedCount === 0)
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "Transaction not found or unauthorized",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "Transaction not found or unauthorized",
+      });
     res.json({ success: true, message: "Transaction deleted successfully" });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 });
 
-// 404 Handler
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Not Found" });
 });
