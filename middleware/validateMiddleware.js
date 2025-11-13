@@ -27,7 +27,7 @@ const validateTransaction = (req, res, next) => {
     return res.status(400).json({ success: false, message: errs.join(", ") });
   }
 
-  // If no errors, proceed to the next middleware or route handler
+  // If no errors, proceed to the next middleware
   next();
 };
 
