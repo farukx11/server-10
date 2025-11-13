@@ -16,10 +16,8 @@ const authMiddleware = async (req, res, next) => {
         .json({ success: false, message: "No token provided" });
     }
 
-    // Verify token and decode it
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Fetch user from database using decoded token
     const user = await User.findById(decoded.id).select("name email photoURL");
 
     if (!user) {
@@ -28,10 +26,8 @@ const authMiddleware = async (req, res, next) => {
         .json({ success: false, message: "User not found" });
     }
 
-    // Attach user to request object
     req.user = user;
 
-    // Move to the next middleware or route handler
     next();
   } catch (err) {
     console.error(err); // Log the error for debugging
