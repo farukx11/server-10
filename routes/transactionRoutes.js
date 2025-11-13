@@ -30,7 +30,7 @@ router.put(
   transactionController.updateTransaction
 );
 
-// Delete transaction by ID
+// Delete transaction
 router.delete(
   "/:id",
   validateObjectId,
