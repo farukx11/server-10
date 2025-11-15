@@ -18,8 +18,6 @@ exports.getOverview = async (req, res) => {
     });
 
     const balance = income - expense;
-
-    // Return the data as JSON
     res.json({ income, expense, balance });
   } catch (err) {
     console.error(err);

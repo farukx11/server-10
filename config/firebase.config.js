@@ -1,5 +1,5 @@
 const express = require("express");
-const { auth } = require("./firebase.config"); // Import Firebase config
+const { auth } = require("./firebase.config");
 const app = express();
 
 app.use(express.json());
@@ -10,7 +10,7 @@ const validateEmail = (email) => {
 };
 
 const validatePassword = (password) => {
-  return password && password.length >= 6; // Password must be at least 6 characters
+  return password && password.length >= 6;
 };
 
 app.post("/create-user", async (req, res) => {

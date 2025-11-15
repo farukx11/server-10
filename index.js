@@ -3,7 +3,8 @@ const express = require("express");
 const { MongoClient, ObjectId, ServerApiVersion } = require("mongodb");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
-const bcrypt = require("bcryptjs"); // Added for secure password hashing
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const bcrypt = require("bcryptjs");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,6 +22,28 @@ const client = new MongoClient(uri, {
 });
 
 let db, usersCollection, transactionsCollection;
+// new
+
+("mongodb+srv://faruka5757_db_user:QAYvtRjbtBH0mjOF@cluster0.xdf9um0.mongodb.net/?appName=Cluster0");
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+run().catch(console.dir);
+
+//
 
 async function connectDB() {
   try {
@@ -28,13 +51,13 @@ async function connectDB() {
     db = client.db("finEaseDB");
     usersCollection = db.collection("users");
     transactionsCollection = db.collection("transactions");
-    console.log("✅ MongoDB connected");
+    console.log("MongoDB connected");
 
     app.listen(port, () => {
-      console.log(`🚀 Server running on http://localhost:${port}`);
+      console.log(`Server running on http://localhost:${port}`);
     });
   } catch (err) {
-    console.error("❌ MongoDB connection failed:", err.message);
+    console.error("MongoDB connection failed:", err.message);
     process.exit(1);
   }
 }
@@ -54,9 +77,8 @@ function verifyJWT(req, res, next) {
   });
 }
 
-// Test Route
 app.get("/", (req, res) => {
-  res.send("FinEase Server is running ✅");
+  res.send("FinEase Server is running");
 });
 
 app.post("/api/auth/register", async (req, res) => {
